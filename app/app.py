@@ -4,6 +4,12 @@ import joblib
 import plotly.express as px
 from pathlib import Path
 
+# Project folder
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+
+
+
 # =========================================================
 # CUSTOM UI STYLING
 # =========================================================
@@ -457,6 +463,46 @@ elif page == "🔍 Risk Prediction":
             "This prediction is not a medical diagnosis and should "
             "not replace advice from a qualified healthcare professional."
         )
+                # -------------------------------------------------
+        # SAVE PREDICTION
+        # -------------------------------------------------
+
+        output_dir = BASE_DIR / "outputs"
+        output_dir.mkdir(exist_ok=True)
+
+        output_file = output_dir / "predictions.csv"
+
+        prediction_record = pd.DataFrame([{
+            "Age": age,
+            "BMI": bmi,
+            "BloodPressure": blood_pressure,
+            "Cholesterol": cholesterol,
+            "Glucose": glucose,
+            "HeartRate": heart_rate,
+            "Gender": gender,
+            "Smoking": smoking,
+            "PhysicalActivity": physical_activity,
+            "FamilyHistory": family_history,
+            "Prediction": "High Risk" if prediction == 1 else "Low Risk",
+            "RiskProbability": round(risk_percentage, 2)
+        }])
+
+        if output_file.exists():
+            old_predictions = pd.read_csv(output_file)
+
+            all_predictions = pd.concat(
+                [old_predictions, prediction_record],
+                ignore_index=True
+            )
+        else:
+            all_predictions = prediction_record
+
+        all_predictions.to_csv(
+            output_file,
+            index=False
+        )
+
+        st.success("✅ Prediction saved successfully.")
 # =========================================================
 # DATA ANALYSIS
 # =========================================================

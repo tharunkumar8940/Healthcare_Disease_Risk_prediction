@@ -1,0 +1,2 @@
+Age,BMI,BloodPressure,Cholesterol,Glucose,HeartRate,Gender,Smoking,PhysicalActivity,FamilyHistory,Prediction,RiskProbability
+22,27.5,130,210,115,78,Female,Yes,Low,Yes,Low Risk,0.0
